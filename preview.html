@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Link Preview</title>
+</head>
+<body>
+  <h1>Links</h1>
+  <ul id="linkList"></ul>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDIRpFQLtAABJDrKUJjfANRwSiyk8tKv1U",
+      authDomain: "qr-code-c43a9.firebaseapp.com",
+      projectId: "qr-code-c43a9",
+      storageBucket: "qr-code-c43a9.appspot.com",
+      messagingSenderId: "425866313992",
+      appId: "1:425866313992:web:2995237e96685a1aea6cbd",
+      measurementId: "G-091Q858390"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    const linkList = document.getElementById("linkList");
+
+    async function fetchLinks() {
+      const docRef = doc(db, "qrLinks", id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const { links } = docSnap.data();
+        links.forEach(link => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = link;
+          a.textContent = link;
+          a.target = "_blank";
+          li.appendChild(a);
+          linkList.appendChild(li);
+        });
+      } else {
+        linkList.innerHTML = "<li>No links found.</li>";
+      }
+    }
+
+    fetchLinks();
+  </script>
+</body>
+</html>
