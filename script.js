@@ -41,7 +41,8 @@ document.getElementById("linkForm").onsubmit = async (e) => {
 
   try {
     await setDoc(doc(db, "qrLinks", id), { links });
-    const qrData = `https://manith003.github.io/New-folder--3-/preview.html?id=${id}`;
+    const qrData = `https://manith003.github.io/
+qr-code-app/preview.html?id=${id}`;
     generateQRCode(qrData);
   } catch (error) {
     console.error("Error saving to Firebase:", error);
